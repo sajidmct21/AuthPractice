@@ -1,23 +1,29 @@
-import express from 'express';
-import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from '../controllers/user.controller.js';
-import { asyncHandlerPromise } from '../utils/asyncHandler.js';
-import { verifyAdmin } from '../middlewares/auth.middleware.js';
+import express from "express";
+import {
+  createUser,
+  deleteUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+} from "../controllers/user.controller.js";
+import { asyncHandlerPromise } from "../utils/asyncHandler.js";
+import { verifyAdmin } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
 // create a user
-router.route('/createUser').post(createUser);
+router.route("/createUser").post(createUser);
 
 // get all users
-router.route('/getAllUsers').get(asyncHandlerPromise(verifyAdmin),getAllUsers);
+router.route("/getAllUsers").get(asyncHandlerPromise(verifyAdmin), getAllUsers);
 
 // get user by id
-router.route('/getUserById/:id').get(getUserById);
+router.route("/getUserById/:id").get(asyncHandlerPromise(getUserById));
 
 // update user
-router.route('/updateUser/:id').put(updateUser);
+router.route("/updateUser/:id").put(updateUser);
 
 // delete a user
-router.route('/deleteUser/:id').delete(deleteUser);
+router.route("/deleteUser/:id").delete(deleteUser);
 
 export default router;

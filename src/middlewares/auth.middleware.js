@@ -64,6 +64,7 @@ export const verifyJWT = async (req, res, next) => {
             return next(new ApiError(401, "Unauthorized request"));
         }
 
+        // eslint-disable-next-line no-undef
         const decodedToken = jwt.verify(token, process.env.ACCESSS_TOKEN_SECRET);
         const user = await User.findById(decodedToken?._id).select('-password -refreshToken');
 

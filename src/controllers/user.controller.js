@@ -6,24 +6,25 @@ export const createUser = async (req, res) => {
   try {
     return res.status(200).json(new ApiResponse(200, "", "User is created"));
   } catch (error) {
-    throw new ApiError(500, "Internal server error");
+    throw new ApiError(500, "Internal server error", error);
   }
 };
 
-export const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find({});
+export const getAllUsers = async (req, res, next) => {
+  const users = await User.find({});
+  if (!users) {
+    return next(new ApiError(401, "No user to find"));
+  } else {
     return res.status(200).json(new ApiResponse(200, users, "All Users"));
-  } catch (error) {
-    throw new ApiError(500, "Internal server error");
   }
 };
 
-export const getUserById = async (req, res) => {
-  try {
-    return res.status(200).json(new ApiResponse(200, "", "Get User by id"));
-  } catch (error) {
-    throw new ApiError(500, "Internal server error");
+export const getUserById = async (req, res, next) => {
+  const user = await User.findById({ _id: req.params.id });
+  if (!user) {
+    return next(new ApiError(401, "No User to find"));
+  } else {
+    return res.status(200).json(new ApiResponse(200, user, "Get User by id"));
   }
 };
 
@@ -31,7 +32,7 @@ export const updateUser = async (req, res) => {
   try {
     return res.status(200).json(new ApiResponse(200, "", "User is updated"));
   } catch (error) {
-    throw new ApiError(500, "Internal server error");
+    throw new ApiError(500, "Internal server error", error);
   }
 };
 
@@ -41,6 +42,6 @@ export const deleteUser = async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, "", "User is deleted successfully"));
   } catch (error) {
-    throw new ApiError(500, "Internal server error");
+    throw new ApiError(500, "Internal server error", error);
   }
 };

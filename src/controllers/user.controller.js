@@ -28,20 +28,22 @@ export const getUserById = async (req, res, next) => {
   }
 };
 
-export const updateUser = async (req, res) => {
-  try {
+export const updateUser = async (req, res, next) => {
+    const user = await User.findById(req.params.id)
+    if(!user){
+      return next(new ApiError(401, 'No user is find to update '))
+    }
     return res.status(200).json(new ApiResponse(200, "", "User is updated"));
-  } catch (error) {
-    throw new ApiError(500, "Internal server error", error);
-  }
+
 };
 
-export const deleteUser = async (req, res) => {
-  try {
+export const deleteUser = async (req, res, next) => {
+  const user = await User.findById(req.params.id)
+  if(!user){
+    return next(new ApiError(401,'No User is found to delete'))
+  }
     return res
       .status(200)
       .json(new ApiResponse(200, "", "User is deleted successfully"));
-  } catch (error) {
-    throw new ApiError(500, "Internal server error", error);
-  }
+
 };

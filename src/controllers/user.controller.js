@@ -33,6 +33,17 @@ export const updateUser = async (req, res, next) => {
     if(!user){
       return next(new ApiError(401, 'No user is find to update '))
     }
+     const {firstName, lastName, password} = req.body;
+    await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set:{
+          firstName,
+          lastName,
+          password
+        }
+      }
+    )
     return res.status(200).json(new ApiResponse(200, "", "User is updated"));
 
 };
@@ -42,6 +53,8 @@ export const deleteUser = async (req, res, next) => {
   if(!user){
     return next(new ApiError(401,'No User is found to delete'))
   }
+  
+  await User.findByIdAndDelete(req.params.id)
     return res
       .status(200)
       .json(new ApiResponse(200, "", "User is deleted successfully"));

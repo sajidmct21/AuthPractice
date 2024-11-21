@@ -52,6 +52,7 @@ userSchema.pre("save", async function(next){
     this.password = await bcrypt.hash(this.password,10)
 })
 
+
 // Password decryption
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password)
@@ -68,8 +69,10 @@ userSchema.methods.createAccessToken = function(){
             isAdmin:this.isAdmin,
             roles:this.roles        
         },
+        // eslint-disable-next-line no-undef
         process.env.ACCESSS_TOKEN_SECRET,
         {
+            // eslint-disable-next-line no-undef
             expiresIn:process.env.ACCESS_TOKEN_EXPIRY
         }
     )
@@ -81,8 +84,10 @@ userSchema.methods.createRefreshToken = function(){
         {
             _id : this._id,
         },
+        // eslint-disable-next-line no-undef
         process.env.REFRESH_TOKEN_SECRET,
         {
+            // eslint-disable-next-line no-undef
             expiresIn: process.env.REFRESH_TOKEN_EXPIRY
         }
     )
